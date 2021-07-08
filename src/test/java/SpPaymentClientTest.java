@@ -43,8 +43,6 @@ public class SpPaymentClientTest {
         SpDomesticPayment payment = new SpDomesticPayment();
         payment.Amount = BigDecimal.valueOf(80);
         payment.Description = "Shopping";
-        payment.FailUrl = URI.create( "http://www.merchant.com/fail");
-        payment.SuccessUrl = URI.create("http://www.merchant.com/success");
         SpDomesticPaymentResponse data = this.paymentClient.CreateDomesticPayment(payment);
         setPaymentId(data.Id);
         System.out.println(this.paymentId);

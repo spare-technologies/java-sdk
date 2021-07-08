@@ -13,12 +13,4 @@ public class SpDomesticPayment {
     @JsonProperty("description")
     public String Description;
 
-    @JsonProperty("successUrl")
-    public URI SuccessUrl;
-
-    @JsonProperty("failUrl")
-    public URI FailUrl;
-
-
-
 }

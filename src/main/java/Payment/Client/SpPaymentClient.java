@@ -3,6 +3,7 @@ package Payment.Client;
 import Payment.Models.Payment.Domestic.SpDomesticPayment;
 import Payment.Models.Payment.Domestic.SpDomesticPaymentResponse;
 import Payment.Models.Response.SpareSdkResponse;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,7 +22,7 @@ import java.util.List;
 public class SpPaymentClient implements ISpPaymentClient {
 
     private SpPaymentClientOptions _clientOptions;
-
+    public ObjectMapper objectMapper;
     @Autowired
     public SpPaymentClient(SpPaymentClientOptions clientOptions) {
         if (clientOptions.BaseUrl == null) {
@@ -35,6 +36,7 @@ public class SpPaymentClient implements ISpPaymentClient {
         }
 
         _clientOptions = clientOptions;
+        objectMapper = SerializerConfiguration.SetConfiguration();
     }
 
     /**
@@ -55,7 +57,6 @@ public class SpPaymentClient implements ISpPaymentClient {
         if (!(response.statusCode() == 200)) {
             throw new Exception();
         }
-        ObjectMapper objectMapper = new ObjectMapper();
         JavaType type = objectMapper.getTypeFactory().constructParametricType(SpareSdkResponse.class, SpDomesticPaymentResponse.class, Object.class );
         SpareSdkResponse<SpDomesticPaymentResponse, Object> model =
                  objectMapper.readValue(response.body(), type);
@@ -81,7 +82,6 @@ public class SpPaymentClient implements ISpPaymentClient {
         if (!(response.statusCode() == 200)) {
             throw new Exception();
         }
-        ObjectMapper objectMapper = new ObjectMapper();
         JavaType type = objectMapper.getTypeFactory().constructParametricType(SpareSdkResponse.class, SpDomesticPaymentResponse.class, Object.class );
         SpareSdkResponse<SpDomesticPaymentResponse, Object> model =
                 objectMapper.readValue(response.body(), type);
@@ -108,7 +108,6 @@ public class SpPaymentClient implements ISpPaymentClient {
         if (!(response.statusCode() == 200)) {
             throw new Exception();
         }
-        ObjectMapper objectMapper = new ObjectMapper();
         SpareSdkResponse<ArrayList<SpDomesticPaymentResponse>, Object> model =
                 objectMapper.readValue(response.body(), new TypeReference<SpareSdkResponse<ArrayList<SpDomesticPaymentResponse>, Object>>() {});
         return model.Data;
@@ -120,9 +119,9 @@ public class SpPaymentClient implements ISpPaymentClient {
      * @param o
      * @return
      */
-    private static String GetBody(Object o) {
-        Gson gson = new Gson();
-        return gson.toJson(o);
+    private static String GetBody(Object o) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(o);
     }
 
     /**

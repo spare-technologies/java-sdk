@@ -53,6 +53,7 @@ public class SpPaymentClientTest {
     @Order(2)
     void GetPayment() throws Exception {
         SpDomesticPaymentResponse data = this.paymentClient.GetDomesticPayment(getPaymentId().toString());
+        System.out.println(data);
         assertThat(data.Id).isNotNull();
     }
     @Test

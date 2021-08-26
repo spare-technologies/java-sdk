@@ -1,5 +1,6 @@
 package Payment.Client;
 
+import Payment.Client.SerializationConfiguration.SerializerConfiguration;
 import Payment.Models.Payment.Domestic.SpDomesticPayment;
 import Payment.Models.Payment.Domestic.SpDomesticPaymentResponse;
 import Payment.Models.Response.SpareSdkResponse;
@@ -7,7 +8,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

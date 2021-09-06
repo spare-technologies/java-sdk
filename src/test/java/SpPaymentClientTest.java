@@ -41,7 +41,7 @@ public class SpPaymentClientTest {
     @Order(1)
     void CreatePayment() throws Exception {
         SpDomesticPayment payment = new SpDomesticPayment();
-        payment.Amount = BigDecimal.valueOf(80);
+        payment.Amount = Double.valueOf(80);
         payment.Description = "Shopping";
         SpDomesticPaymentResponse data = this.paymentClient.CreateDomesticPayment(payment);
         setPaymentId(data.Id);

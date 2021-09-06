@@ -8,7 +8,7 @@ import java.net.URI;
 public class SpDomesticPayment {
 
     @JsonProperty("amount")
-    public BigDecimal Amount;
+    public Double Amount;
 
     @JsonProperty("description")
     public String Description;

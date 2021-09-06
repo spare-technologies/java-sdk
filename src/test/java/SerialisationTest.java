@@ -39,7 +39,7 @@ public class SerialisationTest
     void TestDecimalToStringValues() throws JsonProcessingException
     {
         SpDomesticPayment payment = new SpDomesticPayment();
-        payment.Amount = new BigDecimal(2.5040000000);
+        payment.Amount = new Double(2.5040000000);
         payment.Description = "testing decimal to string";
         String result = mapper.writeValueAsString(payment);
         System.out.println(result);
@@ -56,4 +56,15 @@ public class SerialisationTest
         List<String> desResult = mapper.readValue(result, List.class);
         assertThat(desResult).doesNotContainNull();
     }
+
+    @Test
+    @Order(4)
+    void  TestEmptyArray() throws JsonProcessingException
+        {
+            TestEmptyArrayObject test = new TestEmptyArrayObject();
+            test.Description = "Testing empty array";
+            test.List =  Arrays.asList();
+            String result = mapper.writeValueAsString(test);
+            assertThat(result).doesNotContain("List");
+        }
 }

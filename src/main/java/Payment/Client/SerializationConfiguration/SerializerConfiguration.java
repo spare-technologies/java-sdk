@@ -19,7 +19,7 @@ public final class  SerializerConfiguration {
         mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
         mapper.configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, false);
         SimpleModule SerialisationModule = new SimpleModule();
-        SerialisationModule.addSerializer(BigDecimal.class, new DecimalSerializer());
+        SerialisationModule.addSerializer(Double.class, new DecimalSerializer());
         mapper.getSerializerProvider().setNullValueSerializer(new NullSerializer());
         mapper.registerModule(SerialisationModule);
         return mapper;

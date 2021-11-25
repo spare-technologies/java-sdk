@@ -1,4 +1,4 @@
-import com.spare.sdk.security.dsa.ecdsa.SpEcdsa;
+import com.spare.sdk.security.dsa.ecdsa.SpEccSignatureManager;
 import org.junit.jupiter.api.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,12 +21,12 @@ public class EcdsaTest {
     public void Should_Sign_And_Verify() {
         var data = "data";
         try {
-            var signature = SpEcdsa.Sign(privateKey, data);
+            var signature = SpEccSignatureManager.Sign(privateKey, data);
             assertThat(signature).isNotBlank();
-            var verify = SpEcdsa.Verify(publicKey, data, signature);
+            var verify = SpEccSignatureManager.Verify(publicKey, data, signature);
             assertThat(verify).isTrue();
 
-            var falseVerify = SpEcdsa.Verify(publicKey,"data2",signature);
+            var falseVerify = SpEccSignatureManager.Verify(publicKey,"data2",signature);
             assertThat(falseVerify).isFalse();
         } catch (Exception e) {
             fail(e.getMessage());

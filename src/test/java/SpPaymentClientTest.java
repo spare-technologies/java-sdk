@@ -4,7 +4,7 @@ import com.spare.sdk.payment.client.SpPaymentClientOptions;
 import com.spare.sdk.payment.models.Payment.Domestic.SpCreateDomesticPaymentResponse;
 import com.spare.sdk.payment.models.Payment.Domestic.SpDomesticPayment;
 import com.spare.sdk.payment.models.Payment.Domestic.SpDomesticPaymentResponse;
-import com.spare.sdk.security.dsa.ecdsa.SpEcdsa;
+import com.spare.sdk.security.dsa.ecdsa.SpEccSignatureManager;
 import org.junit.jupiter.api.*;
 
 import java.net.URI;
@@ -59,11 +59,11 @@ public class SpPaymentClientTest {
             SpDomesticPayment payment = new SpDomesticPayment();
             payment.Amount = 80.06;
             payment.Description = "Shopping";
-            SpCreateDomesticPaymentResponse data = this.paymentClient.CreateDomesticPayment(payment, SpEcdsa.Sign(privateKey, payment.toJsonString()));
+            SpCreateDomesticPaymentResponse data = this.paymentClient.CreateDomesticPayment(payment, SpEccSignatureManager.Sign(privateKey, payment.toJsonString()));
             setPaymentId(data.Payment.Id);
             assertThat(data.Payment.Link).isNotNull();
             assertThat(data.Signature.isBlank()).isFalse();
-            assertThat(SpEcdsa.Verify(serverPublicKey, data.Payment.toJsonString(), data.Signature)).isTrue();
+            assertThat(SpEccSignatureManager.Verify(serverPublicKey, data.Payment.toJsonString(), data.Signature)).isTrue();
         } catch (Exception e) {
             fail(e.getMessage());
         }

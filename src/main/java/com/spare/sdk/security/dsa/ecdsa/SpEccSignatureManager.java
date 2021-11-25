@@ -11,7 +11,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
-public final class SpEcdsa {
+public final class SpEccSignatureManager {
 
     private static String PRIVATE_KEY_HEADER = "-----BEGIN PRIVATE KEY-----";
     private static String EC_PRIVATE_KEY_HEADER = "-----BEGIN EC PRIVATE KEY-----";

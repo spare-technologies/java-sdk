@@ -1,0 +1,16 @@
+package com.spare.sdk.utils.serialization;
+
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
+
+import java.io.IOException;
+import java.text.DecimalFormat;
+
+public class DoubleSerializer extends JsonSerializer<Double> {
+
+    @Override
+    public void serialize(Double aDouble, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+        jsonGenerator.writeString(new DecimalFormat("###.######").format(aDouble));
+    }
+}

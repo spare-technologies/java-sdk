@@ -1,70 +1,41 @@
-import Payment.Client.SerializationConfiguration.SerializerConfiguration;
-import Payment.Models.Payment.Domestic.SpDomesticPayment;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.spare.sdk.payment.models.Payment.Domestic.SpDomesticPayment;
 import org.junit.jupiter.api.*;
 
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
 import java.util.regex.Pattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SerialisationTest
-{
-    ObjectMapper mapper;
-    @BeforeEach
-    public void init()
-    {
-      mapper = SerializerConfiguration.SetConfiguration();
-
-    }
+public class SerialisationTest {
 
     @Test
     @Order(1)
-    void TestNullValues() throws JsonProcessingException {
-        SpDomesticPayment payment = new SpDomesticPayment();
-        payment.Amount = null;
-        payment.Description = "testing null value";
-        String result = mapper.writeValueAsString(payment);
-        System.out.println(result);
-        assertThat(result).doesNotContain("amount");
-
+    void Should_Not_Contain_Null() {
+        try {
+            SpDomesticPayment payment = new SpDomesticPayment();
+            payment.Amount = null;
+            payment.Description = "testing null value";
+            String result = payment.toJsonString();
+            System.out.println(result);
+            assertThat(result).doesNotContain("amount");
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
     }
 
     @Test
     @Order(2)
-    void TestDecimalToStringValues() throws JsonProcessingException
-    {
-        SpDomesticPayment payment = new SpDomesticPayment();
-        payment.Amount = new Double(2.5040000000);
-        payment.Description = "testing decimal to string";
-        String result = mapper.writeValueAsString(payment);
-        System.out.println(result);
-        Pattern p =  Pattern.compile("(?s).*\"(amount)\":\"((\\\\\"|[^\"])*)\".*$");
-        assertThat(result).matches(p);
-    }
-
-    @Test
-    @Order(3)
-    void TestNullArrayValues() throws JsonProcessingException
-    {
-        List<String> test = Arrays.asList("A", "B", null, "C");
-        String result = mapper.writeValueAsString(test);
-        List<String> desResult = mapper.readValue(result, List.class);
-        assertThat(desResult).doesNotContainNull();
-    }
-
-    @Test
-    @Order(4)
-    void  TestEmptyArray() throws JsonProcessingException
-        {
-            TestEmptyArrayObject test = new TestEmptyArrayObject();
-            test.Description = "Testing empty array";
-            test.List =  Arrays.asList();
-            String result = mapper.writeValueAsString(test);
-            assertThat(result).doesNotContain("List");
+    void Should_Validate_Amount_Pattern() {
+        try {
+            SpDomesticPayment payment = new SpDomesticPayment();
+            payment.Amount = 229920.5040001000;
+            payment.Description = "testing decimal to string";
+            String result = payment.toJsonString();
+            System.out.println(result);
+            assertThat(result).matches(Pattern.compile("(?s).*\"(amount)\":\"((\\\\\"|[^\"])*)\".*$"));
+        } catch (Exception e) {
+            fail(e.getMessage());
         }
+    }
 }

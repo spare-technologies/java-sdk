@@ -17,22 +17,12 @@ import static org.assertj.core.api.Assertions.fail;
 public class SpPaymentClientTest {
 
     public static String privateKey = """
-            -----BEGIN PRIVATE KEY-----
-            MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgWMr9j+0+68xr6iwc
-            rP02+M9jfH0StJIEWcbcouKA8K2hRANCAATseSJA81lLCYWwC4hQKWa8J2mOlbfN
-            Jxo1SqP46W5Yb1kgcmKsnit5YZUT0WnyDvX3KXlYXnf1OwIltzn97vEc
-            -----END PRIVATE KEY-----""";
+            """;
     public static String publicKey = """
-            -----BEGIN PUBLIC KEY-----
-            MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE7HkiQPNZSwmFsAuIUClmvCdpjpW3
-            zScaNUqj+OluWG9ZIHJirJ4reWGVE9Fp8g719yl5WF539TsCJbc5/e7xHA==
-            -----END PUBLIC KEY-----""";
+            """;
 
     public static String serverPublicKey = """
-            -----BEGIN PUBLIC KEY-----
-            MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEZergpIl9cU89g/iV97ZLPSyPc7S3
-            Z5l3yXTuHXDTOnFwhHr/Pep8UFOl26Gbjxf0I84MjJFsqNsmUSfjdZTr7Q==
-            -----END PUBLIC KEY-----""";
+            """;
 
     private ISpPaymentClient paymentClient;
 
@@ -46,9 +36,9 @@ public class SpPaymentClientTest {
     @BeforeEach
     public void init() {
         SpPaymentClientOptions clientOptions = new SpPaymentClientOptions();
-        clientOptions.BaseUrl = URI.create("http://localhost:3900");
-        clientOptions.ApiKey = "jWfuuYv8WKtl/iH0lT24/rVE2LSgG992tV7+tVK2XaA=";
-        clientOptions.AppId = "IVol/o5oPkoMMu3JcX9QDn+iN9Cqv1GqTjhTdvtpdfQ=";
+        clientOptions.BaseUrl = URI.create("https://payment.tryspare.com");
+        clientOptions.ApiKey = "Your API key";
+        clientOptions.AppId = "Your app id";
         this.paymentClient = new SpPaymentClient(clientOptions);
     }
 

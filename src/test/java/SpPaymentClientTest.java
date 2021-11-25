@@ -46,7 +46,7 @@ public class SpPaymentClientTest {
     @BeforeEach
     public void init() {
         SpPaymentClientOptions clientOptions = new SpPaymentClientOptions();
-        clientOptions.BaseUrl = URI.create("https://devpayment.tryspare.com");
+        clientOptions.BaseUrl = URI.create("http://localhost:3900");
         clientOptions.ApiKey = "jWfuuYv8WKtl/iH0lT24/rVE2LSgG992tV7+tVK2XaA=";
         clientOptions.AppId = "IVol/o5oPkoMMu3JcX9QDn+iN9Cqv1GqTjhTdvtpdfQ=";
         this.paymentClient = new SpPaymentClient(clientOptions);
@@ -63,7 +63,6 @@ public class SpPaymentClientTest {
             setPaymentId(data.Payment.Id);
             assertThat(data.Payment.Link).isNotNull();
             assertThat(data.Signature.isBlank()).isFalse();
-            System.out.println(data.Payment.toJsonString());
             assertThat(SpEcdsa.Verify(serverPublicKey, data.Payment.toJsonString(), data.Signature)).isTrue();
         } catch (Exception e) {
             fail(e.getMessage());

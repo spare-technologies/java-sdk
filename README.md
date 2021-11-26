@@ -2,7 +2,7 @@
 
 ### Usage
 
-1- Add dependencies to pom file
+#### I- Add dependencies to ```pom.xml``` file
 
 ```xml
  <dependency>
@@ -12,7 +12,20 @@
  </dependency>
 ``` 
 
-2- Create a your first payment request
+#### II- To Generate ECC key pair
+
+```java
+import com.spare.sdk.security.crypto.SpCrypto;
+
+public class MyClass {
+    var eccKeyPair = SpCrypto.GenerateKeyPair();
+    System.out.println("Private key \n",eccKeyPair.PrivateKey);
+    System.out.println("\n\n");
+    System.out.println("Private key \n",eccKeyPair.PublicKey);
+}
+```
+
+#### III- To create your first payment request
 
 ```java
 public class MyClass {
@@ -50,7 +63,6 @@ public class MyClass {
         if(SpEccSignatureManager.Verify(serverPublicKey, createPayment.Payment.toJsonString(), createPayment.Signature)){
             // signature verified
         }
-
     }
 }
 ```

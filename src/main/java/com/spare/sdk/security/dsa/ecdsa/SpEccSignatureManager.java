@@ -13,12 +13,12 @@ import java.security.spec.X509EncodedKeySpec;
 
 public final class SpEccSignatureManager {
 
-    private static String PRIVATE_KEY_HEADER = "-----BEGIN PRIVATE KEY-----";
-    private static String EC_PRIVATE_KEY_HEADER = "-----BEGIN EC PRIVATE KEY-----";
-    private static String EC_PRIVATE_KEY_FOOTER = "-----END EC PRIVATE KEY-----";
-    private static String PRIVATE_KEY_FOOTER = "-----END PRIVATE KEY-----";
-    private static String PUBLIC_KEY_HEADER = "-----BEGIN PUBLIC KEY-----";
-    private static String PUBLIC_KEY_FOOTER = "-----END PUBLIC KEY-----";
+    private final static String PRIVATE_KEY_HEADER = "-----BEGIN PRIVATE KEY-----";
+    private final static String EC_PRIVATE_KEY_HEADER = "-----BEGIN EC PRIVATE KEY-----";
+    private final static String EC_PRIVATE_KEY_FOOTER = "-----END EC PRIVATE KEY-----";
+    private final static String PRIVATE_KEY_FOOTER = "-----END PRIVATE KEY-----";
+    private final static String PUBLIC_KEY_HEADER = "-----BEGIN PUBLIC KEY-----";
+    private final static String PUBLIC_KEY_FOOTER = "-----END PUBLIC KEY-----";
 
     /**
      * Sign message
@@ -40,6 +40,7 @@ public final class SpEccSignatureManager {
 
     /**
      * Verify signature
+     *
      * @param publicKey
      * @param data
      * @param signature
@@ -58,6 +59,7 @@ public final class SpEccSignatureManager {
 
     /**
      * Read EC public key
+     *
      * @param pemPublicKey
      * @return
      * @throws NoSuchAlgorithmException

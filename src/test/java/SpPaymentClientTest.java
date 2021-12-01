@@ -9,6 +9,7 @@ import org.junit.jupiter.api.*;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
@@ -16,13 +17,11 @@ import static org.assertj.core.api.Assertions.fail;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class SpPaymentClientTest {
 
-    public static String privateKey = """
-            """;
-    public static String publicKey = """
-            """;
+    public static String privateKey ="";
 
-    public static String serverPublicKey = """
-            """;
+    public static String publicKey = "";
+
+    public static String serverPublicKey = "";
 
     private ISpPaymentClient paymentClient;
 
@@ -52,7 +51,7 @@ public class SpPaymentClientTest {
             SpCreateDomesticPaymentResponse data = this.paymentClient.CreateDomesticPayment(payment, SpEccSignatureManager.Sign(privateKey, payment.toJsonString()));
             setPaymentId(data.Payment.Id);
             assertThat(data.Payment.Link).isNotNull();
-            assertThat(data.Signature.isBlank()).isFalse();
+            assertThat(Objects.equals(data.Signature, "")).isFalse();
             assertThat(SpEccSignatureManager.Verify(serverPublicKey, data.Payment.toJsonString(), data.Signature)).isTrue();
         } catch (Exception e) {
             fail(e.getMessage());

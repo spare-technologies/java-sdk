@@ -11,7 +11,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="Spare.Java.Sdk" target="16" />
+      <module name="Spare.Java.Sdk" target="1.8" />
       <module name="SpareSdk-java" target="16" />
     </bytecodeTargetLevel>
   </component>

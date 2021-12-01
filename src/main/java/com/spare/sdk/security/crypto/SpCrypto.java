@@ -3,6 +3,7 @@ package com.spare.sdk.security.crypto;
 import com.google.common.io.BaseEncoding;
 
 import java.security.InvalidAlgorithmParameterException;
+import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.ECPrivateKey;
@@ -23,11 +24,11 @@ public final class SpCrypto {
      * @throws InvalidAlgorithmParameterException
      */
     public static SpEcKeyPair GenerateKeyPair() throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
-        var gen = KeyPairGenerator.getInstance("EC");
+        KeyPairGenerator gen = KeyPairGenerator.getInstance("EC");
         gen.initialize(new ECGenParameterSpec("secp256r1"));
-        var keys = gen.generateKeyPair();
-        var pr = (ECPrivateKey) keys.getPrivate();
-        var pb = (ECPublicKey) keys.getPublic();
+        KeyPair keys = gen.generateKeyPair();
+        ECPrivateKey pr = (ECPrivateKey) keys.getPrivate();
+        ECPublicKey pb = (ECPublicKey) keys.getPublic();
 
         return new SpEcKeyPair(FormatKey(pr.getEncoded(), true), FormatKey(pb.getEncoded(), false));
     }
@@ -39,8 +40,8 @@ public final class SpCrypto {
      * @return
      */
     private static String FormatKey(byte[] content, boolean isPrivate) {
-        var pem = new StringBuilder();
-        var encoder = BaseEncoding.base64();
+        StringBuilder pem = new StringBuilder();
+        BaseEncoding encoder = BaseEncoding.base64();
         if (isPrivate) {
             pem.append(String.format("%s\n", EC_PRIVATE_KEY_HEADER));
             pem.append(

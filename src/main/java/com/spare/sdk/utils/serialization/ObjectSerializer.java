@@ -27,7 +27,7 @@ public class ObjectSerializer {
      * @throws JsonProcessingException
      */
     public static <T> T toObject(String json, TypeReference<T> reference) throws JsonProcessingException {
-        if (json == null || json.isBlank()) {
+        if (json == null || json.equals("")) {
             return null;
         }
         return new ObjectMapper()

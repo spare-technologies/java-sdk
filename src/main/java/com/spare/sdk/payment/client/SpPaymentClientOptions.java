@@ -18,7 +18,7 @@ public class SpPaymentClientOptions {
             throw new IllegalArgumentException("Base url is required");
         }
 
-        if(AppId.isBlank() || ApiKey.isBlank()){
+        if(AppId == null || AppId.equals("") || ApiKey == null || ApiKey.equals("")){
             throw new IllegalArgumentException("App id and Api key are required");
         }
     }

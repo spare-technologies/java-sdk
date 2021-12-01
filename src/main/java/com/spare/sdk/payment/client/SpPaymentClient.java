@@ -6,14 +6,21 @@ import com.spare.sdk.payment.models.Payment.Domestic.SpDomesticPayment;
 import com.spare.sdk.payment.models.Payment.Domestic.SpDomesticPaymentResponse;
 import com.spare.sdk.payment.models.Response.SpareSdkResponse;
 import com.spare.sdk.utils.serialization.ObjectSerializer;
+import org.apache.http.Header;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.methods.RequestBuilder;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.util.EntityUtils;
 
 import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public final class SpPaymentClient implements ISpPaymentClient {
 
@@ -39,30 +46,30 @@ public final class SpPaymentClient implements ISpPaymentClient {
      */
     @Override
     public SpCreateDomesticPaymentResponse CreateDomesticPayment(SpDomesticPayment payment, String signature) throws Exception {
+
         HttpClient client = GetClient();
 
-        var headers = getHeaders();
-        headers.add("x-signature");
-        headers.add(signature);
-
-        HttpRequest request = HttpRequest.newBuilder()
-                .POST(HttpRequest.BodyPublishers.ofString(payment.toJsonString()))
-                .headers(headers.toArray(String[]::new))
-                .uri(URI.create(GetUrl(SpEndpoints.CreateDomesticPayments)))
+        HttpUriRequest request = RequestBuilder.create("POST")
+                .setUri(URI.create(GetUrl(SpEndpoints.CreateDomesticPayments)))
+                .setEntity(new StringEntity(payment.toJsonString(), ContentType.APPLICATION_JSON))
                 .build();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        request.addHeader(new BasicHeader("x-signature", signature));
 
-        if (response.statusCode() != 200) {
-            throw new Exception(response.body());
+        HttpResponse response = client.execute(request);
+
+        if (response.getStatusLine().getStatusCode() != 200) {
+            throw new Exception(EntityUtils.toString(response.getEntity()));
         }
 
-        var responseModel = ObjectSerializer.toObject(response.body(), new TypeReference<SpareSdkResponse<SpDomesticPaymentResponse, Object>>() {
+        SpareSdkResponse<SpDomesticPaymentResponse, Object> responseModel = ObjectSerializer.toObject(EntityUtils.toString(response.getEntity()), new TypeReference<SpareSdkResponse<SpDomesticPaymentResponse, Object>>() {
         });
 
-        var paymentResponse = new SpCreateDomesticPaymentResponse();
+        Header[] responseSignature = response.getHeaders("x-signature");
+
+        SpCreateDomesticPaymentResponse paymentResponse = new SpCreateDomesticPaymentResponse();
         paymentResponse.Payment = responseModel.Data;
-        paymentResponse.Signature = response.headers().firstValue("x-signature").isPresent() ? response.headers().firstValue("x-signature").get() : null;
+        paymentResponse.Signature = responseSignature != null && responseSignature.length != 0 ? responseSignature[0].getValue() : null;
 
         return paymentResponse;
     }
@@ -76,19 +83,20 @@ public final class SpPaymentClient implements ISpPaymentClient {
     @Override
     public SpDomesticPaymentResponse GetDomesticPayment(String id) throws Exception {
         HttpClient client = GetClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .GET()
-                .headers(getHeaders().toArray(String[]::new))
-                .uri(URI.create(String.format("%s?id=%s", GetUrl(SpEndpoints.GetDomesticPayment), id)))
+
+        HttpUriRequest request = RequestBuilder.create("GET")
+                .setUri(URI.create(String.format("%s?id=%s", GetUrl(SpEndpoints.GetDomesticPayment), id)))
                 .build();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        if (!(response.statusCode() == 200)) {
-            throw new Exception(response.body());
+        HttpResponse response = client.execute(request);
+
+        if (response.getStatusLine().getStatusCode() != 200) {
+            throw new Exception(EntityUtils.toString(response.getEntity()));
         }
 
-        return ObjectSerializer.toObject(response.body(), new TypeReference<SpareSdkResponse<SpDomesticPaymentResponse, Object>>() {
+
+        return ObjectSerializer.toObject(EntityUtils.toString(response.getEntity()), new TypeReference<SpareSdkResponse<SpDomesticPaymentResponse, Object>>() {
         }).Data;
 
     }
@@ -107,19 +115,18 @@ public final class SpPaymentClient implements ISpPaymentClient {
         }
 
         HttpClient client = GetClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .GET()
-                .headers(getHeaders().toArray(String[]::new))
-                .uri(URI.create(String.format("%s?start=%s&perPage=%s", GetUrl(SpEndpoints.ListDomesticPayments), start, perPage)))
+
+        HttpUriRequest request = RequestBuilder.create("GET")
+                .setUri(URI.create(String.format("%s?start=%s&perPage=%s", GetUrl(SpEndpoints.ListDomesticPayments), start, perPage)))
                 .build();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse response = client.execute(request);
 
-        if (!(response.statusCode() == 200)) {
-            throw new Exception();
+        if (response.getStatusLine().getStatusCode() != 200) {
+            throw new Exception(EntityUtils.toString(response.getEntity()));
         }
 
-        return ObjectSerializer.toObject(response.body(), new TypeReference<SpareSdkResponse<ArrayList<SpDomesticPaymentResponse>, Object>>() {
+        return ObjectSerializer.toObject(EntityUtils.toString(response.getEntity()), new TypeReference<SpareSdkResponse<ArrayList<SpDomesticPaymentResponse>, Object>>() {
         }).Data;
     }
 
@@ -138,27 +145,16 @@ public final class SpPaymentClient implements ISpPaymentClient {
      *
      * @return
      */
-    private HttpClient GetClient() {
+    private CloseableHttpClient GetClient() {
         _clientOptions.ValidateConfiguration();
 
-        return HttpClient.newBuilder()
+        return HttpClients.custom()
+                .setDefaultHeaders(new ArrayList<>(Arrays.asList(
+                        new BasicHeader("Content-Type", "application/json"),
+                        new BasicHeader("accept", "application/json"),
+                        new BasicHeader("app-id", _clientOptions.AppId),
+                        new BasicHeader("x-api-key", _clientOptions.ApiKey)
+                )))
                 .build();
     }
-
-    /**
-     * Setup headers
-     *
-     * @return
-     */
-    private List<String> getHeaders() {
-        return new ArrayList<>(Arrays.asList("Content-Type",
-                "application/json",
-                "accept",
-                "application/json",
-                "app-id",
-                _clientOptions.AppId,
-                "x-api-key",
-                _clientOptions.ApiKey));
-    }
-
 }

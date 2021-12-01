@@ -6,10 +6,10 @@
 
 ```xml
  <dependency>
-    <groupId>com.spare</groupId>
-    <artifactId>sdk</artifactId>
+    <groupId>com.tryspare</groupId>
+    <artifactId>java.sdk</artifactId>
     <version>1.0.0</version>
- </dependency>
+</dependency>
 ``` 
 
 #### II- To Generate ECC key pair

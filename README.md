@@ -1,5 +1,5 @@
 # java-sdk
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.tryspare/java.sdk/badge.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/com.tryspare/java.sdk)
+[![Maven Central](https://img.shields.io/maven-central/v/com.tryspare/java.sdk.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.tryspare%22%20AND%20a:%22java.sdk%22)
 
 ### Usage
 

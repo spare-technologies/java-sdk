@@ -1,4 +1,5 @@
 # java-sdk
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.tryspare/java.sdk/badge.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/com.tryspare/java.sdk)
 
 ### Usage
 
@@ -9,7 +10,7 @@
     <groupId>com.tryspare</groupId>
     <artifactId>java.sdk</artifactId>
     <version>1.0.0</version>
-</dependency>
+ </dependency>
 ``` 
 
 #### II- To Generate ECC key pair

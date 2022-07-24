@@ -1,4 +1,4 @@
-package com.spare.sdk.payment.models.Payment.Account;
+package com.spare.sdk.payment.models.payment.account;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;

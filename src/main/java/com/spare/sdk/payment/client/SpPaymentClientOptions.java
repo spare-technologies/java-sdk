@@ -47,7 +47,7 @@ public class SpPaymentClientOptions {
     /**
      * Validate client configuration
      */
-    public void ValidateConfiguration(){
+    public void validateConfiguration(){
         if(baseUrl == null){
             throw new IllegalArgumentException("Base url is required");
         }

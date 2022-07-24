@@ -1,6 +1,6 @@
 import com.github.javafaker.Faker;
-import com.spare.sdk.payment.models.Payment.Domestic.SpDomesticPaymentRequest;
-import com.spare.sdk.payment.models.Payment.Domestic.SpPaymentDebtorInformation;
+import com.spare.sdk.payment.models.payment.domestic.SpDomesticPaymentRequest;
+import com.spare.sdk.payment.models.payment.domestic.SpPaymentDebtorInformation;
 import com.spare.sdk.payment.models.builder.SpDomesticPaymentRequestBuilder;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.*;

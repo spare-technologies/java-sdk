@@ -1,4 +1,4 @@
-package com.spare.sdk.payment.models.Response;
+package com.spare.sdk.payment.models.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -9,7 +9,7 @@ import com.spare.sdk.utils.helpers.models.SpModel;
 @JsonPropertyOrder(alphabetic = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public final class SpareSdkResponse<T, TV> extends SpModel {
+public final class SpareSdkResponse<T, V> extends SpModel {
 
     @JsonProperty("error")
     private String error;
@@ -18,7 +18,7 @@ public final class SpareSdkResponse<T, TV> extends SpModel {
     private T data;
 
     @JsonProperty("meta")
-    private TV meta;
+    private V meta;
 
     public String getError() {
         return error;
@@ -36,11 +36,11 @@ public final class SpareSdkResponse<T, TV> extends SpModel {
         this.data = data;
     }
 
-    public TV getMeta() {
+    public V getMeta() {
         return meta;
     }
 
-    public void setMeta(TV meta) {
+    public void setMeta(V meta) {
         this.meta = meta;
     }
 }

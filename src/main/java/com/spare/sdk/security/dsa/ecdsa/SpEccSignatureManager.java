@@ -13,37 +13,40 @@ import java.security.spec.X509EncodedKeySpec;
 
 public final class SpEccSignatureManager {
 
-    private final static String PRIVATE_KEY_HEADER = "-----BEGIN PRIVATE KEY-----";
-    private final static String EC_PRIVATE_KEY_HEADER = "-----BEGIN EC PRIVATE KEY-----";
-    private final static String EC_PRIVATE_KEY_FOOTER = "-----END EC PRIVATE KEY-----";
-    private final static String PRIVATE_KEY_FOOTER = "-----END PRIVATE KEY-----";
-    private final static String PUBLIC_KEY_HEADER = "-----BEGIN PUBLIC KEY-----";
-    private final static String PUBLIC_KEY_FOOTER = "-----END PUBLIC KEY-----";
+    private static final String PRIVATE_KEY_HEADER = "-----BEGIN PRIVATE KEY-----";
+    private static final String EC_PRIVATE_KEY_HEADER = "-----BEGIN EC PRIVATE KEY-----";
+    private static final String EC_PRIVATE_KEY_FOOTER = "-----END EC PRIVATE KEY-----";
+    private static final String PRIVATE_KEY_FOOTER = "-----END PRIVATE KEY-----";
+    private static final String PUBLIC_KEY_HEADER = "-----BEGIN PUBLIC KEY-----";
+    private static final String PUBLIC_KEY_FOOTER = "-----END PUBLIC KEY-----";
+
+    private SpEccSignatureManager() {
+    }
 
     /**
      * Sign message
      */
-    public static String Sign(String privateKey, String data) throws NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException, SignatureException {
+    public static String sign(String privateKey, String data) throws NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException, SignatureException {
         Signature signer = Signature.getInstance("SHA256withECDSA");
-        signer.initSign(ReadPrivateKey(privateKey));
+        signer.initSign(readPrivateKey(privateKey));
         signer.update(data.getBytes(StandardCharsets.UTF_8));
-        return SpUtils.BytesToBase64(signer.sign());
+        return SpUtils.bytesToBase64(signer.sign());
     }
 
     /**
      * Verify signature
      */
-    public static boolean Verify(String publicKey, String data, String signature) throws NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException, SignatureException {
+    public static boolean verify(String publicKey, String data, String signature) throws NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException, SignatureException {
         Signature signer = Signature.getInstance("SHA256withECDSA");
-        signer.initVerify(ReadPublicKey(publicKey));
+        signer.initVerify(readPublicKey(publicKey));
         signer.update(data.getBytes(StandardCharsets.UTF_8));
-        return signer.verify(SpUtils.DecodeFromBase64(signature));
+        return signer.verify(SpUtils.decodeFromBase64(signature));
     }
 
     /**
      * Read EC public key
      */
-    private static ECPublicKey ReadPublicKey(String pemPublicKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    private static ECPublicKey readPublicKey(String pemPublicKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
         String base64 = pemPublicKey.replace(PUBLIC_KEY_FOOTER, "")
                 .replace(PUBLIC_KEY_HEADER, "");
         BaseEncoding encode = BaseEncoding.base64();
@@ -55,7 +58,7 @@ public final class SpEccSignatureManager {
     /**
      * Read ecc private key from
      */
-    private static ECPrivateKey ReadPrivateKey(String pemPrivateKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    private static ECPrivateKey readPrivateKey(String pemPrivateKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
         String base64 = pemPrivateKey.replace(EC_PRIVATE_KEY_HEADER, "")
                 .replace(EC_PRIVATE_KEY_FOOTER, "")
                 .replace(PRIVATE_KEY_HEADER, "")

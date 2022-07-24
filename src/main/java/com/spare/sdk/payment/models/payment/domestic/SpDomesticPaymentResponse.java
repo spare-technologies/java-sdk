@@ -1,11 +1,11 @@
-package com.spare.sdk.payment.models.Payment.Domestic;
+package com.spare.sdk.payment.models.payment.domestic;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.spare.sdk.payment.Enum.SpPaymentSource;
-import com.spare.sdk.payment.models.Payment.Account.SpPaymentIssuer;
-import com.spare.sdk.payment.models.Payment.Account.SpPaymentUserAccount;
+import com.spare.sdk.payment.models.payment.account.SpPaymentIssuer;
+import com.spare.sdk.payment.models.payment.account.SpPaymentUserAccount;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonPropertyOrder(alphabetic = true)

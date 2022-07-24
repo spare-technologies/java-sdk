@@ -1,4 +1,4 @@
-import com.spare.sdk.payment.models.Payment.Domestic.SpDomesticPayment;
+import com.spare.sdk.payment.models.payment.domestic.SpDomesticPayment;
 import org.junit.jupiter.api.*;
 
 import java.util.regex.Pattern;

@@ -7,6 +7,9 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
 public class ObjectSerializer {
 
+    private ObjectSerializer() {
+    }
+
     /**
      * Serialize object
      */

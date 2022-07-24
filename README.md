@@ -19,7 +19,7 @@
 import com.spare.sdk.security.crypto.SpCrypto;
 
 public class MyClass {
-    var eccKeyPair = SpCrypto.GenerateKeyPair();
+    var eccKeyPair = SpCrypto.generateKeyPair();
     System.out.println("Private key \n",eccKeyPair.PrivateKey);
     System.out.println("\n\n");
     System.out.println("Private key \n",eccKeyPair.PublicKey);

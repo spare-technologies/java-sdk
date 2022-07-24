@@ -1,4 +1,4 @@
-package com.spare.sdk.payment.models.Payment.Account;
+package com.spare.sdk.payment.models.payment.account;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -9,19 +9,18 @@ import com.spare.sdk.utils.helpers.models.SpModel;
 @JsonPropertyOrder(alphabetic = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public final class SpPaymentUserAccount extends SpModel {
+public final class SpUserPaymentBankAccount extends SpModel {
+    @JsonProperty("scheme")
+    private String scheme;
 
-    @JsonProperty("account")
-    private SpUserAccount account;
+    @JsonProperty("identification")
+    private String identification;
 
-    @JsonProperty("bankAccount")
-    private SpUserPaymentBankAccount bankAccount;
-
-    public SpUserAccount getAccount() {
-        return account;
+    public String getScheme() {
+        return scheme;
     }
 
-    public SpUserPaymentBankAccount getBankAccount() {
-        return bankAccount;
+    public String getIdentification() {
+        return identification;
     }
 }

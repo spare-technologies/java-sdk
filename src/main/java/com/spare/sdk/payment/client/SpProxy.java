@@ -4,35 +4,35 @@ import org.apache.http.HttpHost;
 import org.apache.http.auth.UsernamePasswordCredentials;
 
 public class SpProxy {
-    private HttpHost Host;
+    private HttpHost host;
 
-    private UsernamePasswordCredentials Credentials;
+    private UsernamePasswordCredentials credentials;
 
     public SpProxy() {
     }
 
     public SpProxy(HttpHost host) {
-        Host = host;
+        this.host = host;
     }
 
     public SpProxy(HttpHost host, UsernamePasswordCredentials credentials) {
-        Host = host;
-        Credentials = credentials;
+        this.host = host;
+        this.credentials = credentials;
     }
 
     public HttpHost getHost() {
-        return Host;
+        return host;
     }
 
     public void setHost(HttpHost host) {
-        Host = host;
+        this.host = host;
     }
 
     public UsernamePasswordCredentials getCredentials() {
-        return Credentials;
+        return credentials;
     }
 
     public void setCredentials(UsernamePasswordCredentials credentials) {
-        Credentials = credentials;
+        this.credentials = credentials;
     }
 }

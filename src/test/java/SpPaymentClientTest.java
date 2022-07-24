@@ -5,11 +5,11 @@ import com.spare.sdk.payment.client.ISpPaymentClient;
 import com.spare.sdk.payment.client.SpPaymentClient;
 import com.spare.sdk.payment.client.SpPaymentClientOptions;
 import com.spare.sdk.payment.client.SpProxy;
-import com.spare.sdk.payment.models.Payment.Domestic.SpCreateDomesticPaymentResponse;
-import com.spare.sdk.payment.models.Payment.Domestic.SpDomesticPaymentRequest;
-import com.spare.sdk.payment.models.Payment.Domestic.SpDomesticPaymentResponse;
-import com.spare.sdk.payment.models.Payment.Domestic.SpPaymentDebtorInformation;
-import com.spare.sdk.payment.models.Response.SpareSdkResponse;
+import com.spare.sdk.payment.models.payment.domestic.SpCreateDomesticPaymentResponse;
+import com.spare.sdk.payment.models.payment.domestic.SpDomesticPaymentRequest;
+import com.spare.sdk.payment.models.payment.domestic.SpDomesticPaymentResponse;
+import com.spare.sdk.payment.models.payment.domestic.SpPaymentDebtorInformation;
+import com.spare.sdk.payment.models.response.SpareSdkResponse;
 import com.spare.sdk.payment.models.builder.SpDomesticPaymentRequestBuilder;
 import com.spare.sdk.security.dsa.ecdsa.SpEccSignatureManager;
 import models.SpTestEnvironment;
@@ -79,8 +79,8 @@ public class SpPaymentClientTest {
                     .setOrderId(faker.random().nextInt(1000, 20000).toString())
                     .build();
 
-            SpCreateDomesticPaymentResponse paymentResponse = this.paymentClient.CreateDomesticPayment(paymentRequest,
-                    SpEccSignatureManager.Sign(testEnvironment.getEcKeypair().getPrivate(), paymentRequest.toJsonString()));
+            SpCreateDomesticPaymentResponse paymentResponse = this.paymentClient.createDomesticPayment(paymentRequest,
+                    SpEccSignatureManager.sign(testEnvironment.getEcKeypair().getPrivate(), paymentRequest.toJsonString()));
 
             assertThat(paymentResponse).isNotNull().as("Payment response should not be null");
 
@@ -96,7 +96,7 @@ public class SpPaymentClientTest {
                     .isNotBlank()
                     .as("Payment response link should not be null");
 
-            assertThat(SpEccSignatureManager.Verify(testEnvironment.getServerPublicKey(),
+            assertThat(SpEccSignatureManager.verify(testEnvironment.getServerPublicKey(),
                     paymentResponse.getPayment().toJsonString(), paymentResponse.getSignature()))
                     .isTrue()
                     .as("Payment response signature should be valid");
@@ -133,8 +133,8 @@ public class SpPaymentClientTest {
                                     .replace(" ", "")))
                     .build();
 
-            SpCreateDomesticPaymentResponse paymentResponse = this.paymentClient.CreateDomesticPayment(paymentRequest,
-                    SpEccSignatureManager.Sign(testEnvironment.getEcKeypair().getPrivate(), paymentRequest.toJsonString()));
+            SpCreateDomesticPaymentResponse paymentResponse = this.paymentClient.createDomesticPayment(paymentRequest,
+                    SpEccSignatureManager.sign(testEnvironment.getEcKeypair().getPrivate(), paymentRequest.toJsonString()));
 
             assertThat(paymentResponse).isNotNull().as("Payment response should not be null");
 
@@ -142,7 +142,7 @@ public class SpPaymentClientTest {
                 System.out.println(paymentResponse.toJsonString());
             }
 
-            assertThat(SpEccSignatureManager.Verify(testEnvironment.getServerPublicKey(),
+            assertThat(SpEccSignatureManager.verify(testEnvironment.getServerPublicKey(),
                     paymentResponse.getPayment().toJsonString(), paymentResponse.getSignature()))
                     .isTrue()
                     .as("Payment response signature should be valid");
@@ -246,7 +246,7 @@ public class SpPaymentClientTest {
     @Order(3)
     void should_get_payment() {
         try {
-            SpareSdkResponse<SpDomesticPaymentResponse, Object> paymentResponse = this.paymentClient.GetDomesticPayment(paymentId);
+            SpareSdkResponse<SpDomesticPaymentResponse, Object> paymentResponse = this.paymentClient.getDomesticPayment(paymentId);
 
             assertThat(paymentResponse).isNotNull().as("Payment response should not be null");
 
@@ -279,7 +279,7 @@ public class SpPaymentClientTest {
         try {
             Faker faker = Faker.instance();
 
-            SpareSdkResponse<ArrayList<SpDomesticPaymentResponse>, Object> listDomesticPayments = this.paymentClient.ListDomesticPayments(0,
+            SpareSdkResponse<ArrayList<SpDomesticPaymentResponse>, Object> listDomesticPayments = this.paymentClient.listDomesticPayments(0,
                     faker.random().nextInt(1, 500));
 
             assertThat(listDomesticPayments).isNotNull().as("Domestic payments list response should not be null");
@@ -325,7 +325,7 @@ public class SpPaymentClientTest {
                 .build();
 
 
-        assertThrows(Exception.class, () -> this.paymentClient.CreateDomesticPayment(paymentRequest, ""));
+        assertThrows(Exception.class, () -> this.paymentClient.createDomesticPayment(paymentRequest, ""));
     }
 
     /**

@@ -12,28 +12,31 @@ import java.security.spec.ECGenParameterSpec;
 
 public final class SpCrypto {
 
-    private final static String EC_PRIVATE_KEY_HEADER = "-----BEGIN EC PRIVATE KEY-----";
-    private final static String EC_PRIVATE_KEY_FOOTER = "-----END EC PRIVATE KEY-----";
-    private final static String PUBLIC_KEY_HEADER = "-----BEGIN PUBLIC KEY-----";
-    private final static String PUBLIC_KEY_FOOTER = "-----END PUBLIC KEY-----";
+    private static final String EC_PRIVATE_KEY_HEADER = "-----BEGIN EC PRIVATE KEY-----";
+    private static final String EC_PRIVATE_KEY_FOOTER = "-----END EC PRIVATE KEY-----";
+    private static final String PUBLIC_KEY_HEADER = "-----BEGIN PUBLIC KEY-----";
+    private static final String PUBLIC_KEY_FOOTER = "-----END PUBLIC KEY-----";
+
+    private SpCrypto() {
+    }
 
     /**
      * Generate key ecc prime256v1 key pair
      */
-    public static SpEcKeyPair GenerateKeyPair() throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
+    public static SpEcKeyPair generateKeyPair() throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
         KeyPairGenerator gen = KeyPairGenerator.getInstance("EC");
         gen.initialize(new ECGenParameterSpec("secp256r1"));
         KeyPair keys = gen.generateKeyPair();
         ECPrivateKey pr = (ECPrivateKey) keys.getPrivate();
         ECPublicKey pb = (ECPublicKey) keys.getPublic();
 
-        return new SpEcKeyPair(FormatKey(pr.getEncoded(), true), FormatKey(pb.getEncoded(), false));
+        return new SpEcKeyPair(formatKey(pr.getEncoded(), true), formatKey(pb.getEncoded(), false));
     }
 
     /**
      * Format key
      */
-    private static String FormatKey(byte[] content, boolean isPrivate) {
+    private static String formatKey(byte[] content, boolean isPrivate) {
         StringBuilder pem = new StringBuilder();
         BaseEncoding encoder = BaseEncoding.base64();
         if (isPrivate) {

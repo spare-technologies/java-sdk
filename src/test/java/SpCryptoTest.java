@@ -17,7 +17,7 @@ public class SpCryptoTest {
     @Order(1)
     public void Should_generate_key_pair() {
         try {
-            SpEcKeyPair keys = SpCrypto.GenerateKeyPair();
+            SpEcKeyPair keys = SpCrypto.generateKeyPair();
 
             assertThat(keys).isNotNull().as("Keypair should not be null");
 
@@ -39,15 +39,15 @@ public class SpCryptoTest {
         Faker faker = Faker.instance();
         String data = faker.lorem().characters();
 
-        SpEcKeyPair keys = SpCrypto.GenerateKeyPair();
+        SpEcKeyPair keys = SpCrypto.generateKeyPair();
 
         try {
-            String signature = SpEccSignatureManager.Sign(keys.getPrivateKey(), data);
+            String signature = SpEccSignatureManager.sign(keys.getPrivateKey(), data);
             assertThat(signature).isNotBlank().as("Signature should not be blanc");
-            boolean verify = SpEccSignatureManager.Verify(keys.getPublicKey(), data, signature);
+            boolean verify = SpEccSignatureManager.verify(keys.getPublicKey(), data, signature);
             assertThat(verify).isTrue().as("Signature should be valid");
 
-            boolean falseVerify = SpEccSignatureManager.Verify(keys.getPublicKey(), faker.lorem().characters(), signature);
+            boolean falseVerify = SpEccSignatureManager.verify(keys.getPublicKey(), faker.lorem().characters(), signature);
             assertThat(falseVerify).isFalse().as("Signature should not be valid");
         } catch (Exception e) {
             fail(e.getMessage());

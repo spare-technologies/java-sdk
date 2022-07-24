@@ -1,7 +1,7 @@
 package com.spare.sdk.payment.models.builder;
 
-import com.spare.sdk.payment.models.Payment.Domestic.SpDomesticPaymentRequest;
-import com.spare.sdk.payment.models.Payment.Domestic.SpPaymentDebtorInformation;
+import com.spare.sdk.payment.models.payment.domestic.SpDomesticPaymentRequest;
+import com.spare.sdk.payment.models.payment.domestic.SpPaymentDebtorInformation;
 
 public class SpDomesticPaymentRequestBuilder {
 

@@ -2,18 +2,22 @@ package com.spare.sdk.payment.client;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.spare.sdk.payment.models.Payment.Domestic.SpCreateDomesticPaymentResponse;
-import com.spare.sdk.payment.models.Payment.Domestic.SpDomesticPayment;
+import com.spare.sdk.payment.models.Payment.Domestic.SpDomesticPaymentRequest;
 import com.spare.sdk.payment.models.Payment.Domestic.SpDomesticPaymentResponse;
 import com.spare.sdk.payment.models.Response.SpareSdkResponse;
 import com.spare.sdk.utils.serialization.ObjectSerializer;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
@@ -38,20 +42,15 @@ public final class SpPaymentClient implements ISpPaymentClient {
 
     /**
      * Create domestic payment
-     *
-     * @param payment
-     * @param signature
-     * @return
-     * @throws Exception
      */
     @Override
-    public SpCreateDomesticPaymentResponse CreateDomesticPayment(SpDomesticPayment payment, String signature) throws Exception {
+    public SpCreateDomesticPaymentResponse CreateDomesticPayment(SpDomesticPaymentRequest paymentRequest, String signature) throws Exception {
 
         HttpClient client = GetClient();
 
         HttpUriRequest request = RequestBuilder.create("POST")
                 .setUri(URI.create(GetUrl(SpEndpoints.CreateDomesticPayments)))
-                .setEntity(new StringEntity(payment.toJsonString(), ContentType.APPLICATION_JSON))
+                .setEntity(new StringEntity(paymentRequest.toJsonString(), ContentType.APPLICATION_JSON))
                 .build();
 
         request.addHeader(new BasicHeader("x-signature", signature));
@@ -68,20 +67,17 @@ public final class SpPaymentClient implements ISpPaymentClient {
         Header[] responseSignature = response.getHeaders("x-signature");
 
         SpCreateDomesticPaymentResponse paymentResponse = new SpCreateDomesticPaymentResponse();
-        paymentResponse.Payment = responseModel.Data;
-        paymentResponse.Signature = responseSignature != null && responseSignature.length != 0 ? responseSignature[0].getValue() : null;
+        paymentResponse.setPayment(responseModel.getData());
+        paymentResponse.setSignature(responseSignature != null && responseSignature.length != 0 ? responseSignature[0].getValue() : null);
 
         return paymentResponse;
     }
 
     /**
      * Get domestic payment
-     *
-     * @param id
-     * @return
      */
     @Override
-    public SpDomesticPaymentResponse GetDomesticPayment(String id) throws Exception {
+    public SpareSdkResponse<SpDomesticPaymentResponse, Object> GetDomesticPayment(String id) throws Exception {
         HttpClient client = GetClient();
 
         HttpUriRequest request = RequestBuilder.create("GET")
@@ -96,20 +92,15 @@ public final class SpPaymentClient implements ISpPaymentClient {
         }
 
 
-        return ObjectSerializer.toObject(EntityUtils.toString(response.getEntity()), new TypeReference<SpareSdkResponse<SpDomesticPaymentResponse, Object>>() {
-        }).Data;
+        return ObjectSerializer.toObject(EntityUtils.toString(response.getEntity()), new TypeReference<SpareSdkResponse<SpDomesticPaymentResponse, Object>>() {});
 
     }
 
     /**
      * List domestic payments
-     *
-     * @param start
-     * @param perPage
-     * @return
      */
     @Override
-    public ArrayList<SpDomesticPaymentResponse> ListDomesticPayments(int start, int perPage) throws Exception {
+    public SpareSdkResponse<ArrayList<SpDomesticPaymentResponse>, Object> ListDomesticPayments(int start, int perPage) throws Exception {
         if (perPage == 0) {
             perPage = 100;
         }
@@ -127,34 +118,45 @@ public final class SpPaymentClient implements ISpPaymentClient {
         }
 
         return ObjectSerializer.toObject(EntityUtils.toString(response.getEntity()), new TypeReference<SpareSdkResponse<ArrayList<SpDomesticPaymentResponse>, Object>>() {
-        }).Data;
+        });
     }
 
     /**
      * Get request url
-     *
-     * @param endpoints
-     * @return
      */
     private String GetUrl(SpEndpoints endpoints) {
-        return String.format("%s%s", _clientOptions.BaseUrl, endpoints.Value);
+        return String.format("%s%s", _clientOptions.getBaseUrl(), endpoints.Value);
     }
 
     /**
      * Get http client
-     *
-     * @return
      */
     private CloseableHttpClient GetClient() {
         _clientOptions.ValidateConfiguration();
 
-        return HttpClients.custom()
+        HttpClientBuilder clientBuilder = HttpClients.custom()
                 .setDefaultHeaders(new ArrayList<>(Arrays.asList(
                         new BasicHeader("Content-Type", "application/json"),
                         new BasicHeader("accept", "application/json"),
-                        new BasicHeader("app-id", _clientOptions.AppId),
-                        new BasicHeader("x-api-key", _clientOptions.ApiKey)
-                )))
-                .build();
+                        new BasicHeader("app-id", _clientOptions.getAppId()),
+                        new BasicHeader("x-api-key", _clientOptions.getApiKey())
+                )));
+
+        if (_clientOptions.getProxy() != null && _clientOptions.getProxy().getHost() != null) {
+            if (_clientOptions.getProxy().getCredentials() == null) {
+                return clientBuilder.setProxy(_clientOptions.getProxy().getHost())
+                        .build();
+            }
+
+            AuthScope authScope = new AuthScope(_clientOptions.getProxy().getHost().getHostName(), _clientOptions.getProxy().getHost().getPort());
+            CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+            credentialsProvider.setCredentials(authScope, _clientOptions.getProxy().getCredentials());
+
+            return clientBuilder.setProxy(_clientOptions.getProxy().getHost())
+                    .setDefaultCredentialsProvider(credentialsProvider)
+                    .build();
+        }
+
+        return clientBuilder.build();
     }
 }

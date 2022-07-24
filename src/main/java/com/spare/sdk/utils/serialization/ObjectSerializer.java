@@ -9,9 +9,6 @@ public class ObjectSerializer {
 
     /**
      * Serialize object
-     * @param thiz
-     * @return
-     * @throws JsonProcessingException
      */
     public static String toJsonString(Object thiz) throws JsonProcessingException {
         return new ObjectMapper()
@@ -21,10 +18,6 @@ public class ObjectSerializer {
 
     /**
      * Create object from json string
-     * @param json
-     * @param <T>
-     * @return
-     * @throws JsonProcessingException
      */
     public static <T> T toObject(String json, TypeReference<T> reference) throws JsonProcessingException {
         if (json == null || json.equals("")) {

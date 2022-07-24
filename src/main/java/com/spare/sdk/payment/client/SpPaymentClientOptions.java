@@ -4,21 +4,55 @@ import java.net.URI;
 
 public class SpPaymentClientOptions {
 
-    public URI BaseUrl;
+    private URI baseUrl;
 
-    public String AppId;
+    private String appId;
 
-    public String ApiKey;
+    private String apiKey;
+
+    private SpProxy proxy;
+
+    public URI getBaseUrl() {
+        return baseUrl;
+    }
+
+    public void setBaseUrl(URI baseUrl) {
+        this.baseUrl = baseUrl;
+    }
+
+    public String getAppId() {
+        return appId;
+    }
+
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
+
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
+    }
+
+    public SpProxy getProxy() {
+        return proxy;
+    }
+
+    public void setProxy(SpProxy proxy) {
+        this.proxy = proxy;
+    }
 
     /**
      * Validate client configuration
      */
     public void ValidateConfiguration(){
-        if(BaseUrl == null){
+        if(baseUrl == null){
             throw new IllegalArgumentException("Base url is required");
         }
 
-        if(AppId == null || AppId.equals("") || ApiKey == null || ApiKey.equals("")){
+        if(appId == null || appId.equals("") || apiKey == null || apiKey.equals("")){
             throw new IllegalArgumentException("App id and Api key are required");
         }
     }

@@ -12,12 +12,51 @@ import com.spare.sdk.utils.serialization.DoubleSerializer;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SpDomesticPayment extends SpModel {
-
     @JsonProperty("amount")
     @JsonSerialize(using = DoubleSerializer.class)
-    public Double Amount;
+    private Double amount;
 
     @JsonProperty("description")
-    public String Description;
+    private String description;
 
+    @JsonProperty("orderId")
+    private String orderId;
+
+    public SpDomesticPayment() {
+    }
+
+    public SpDomesticPayment(Double amount, String description) {
+        this.amount = amount;
+        this.description = description;
+    }
+
+    public SpDomesticPayment(Double amount, String description, String orderId) {
+        this.amount = amount;
+        this.description = description;
+        this.orderId = orderId;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
 }

@@ -22,14 +22,6 @@ public final class SpEccSignatureManager {
 
     /**
      * Sign message
-     *
-     * @param privateKey
-     * @param data
-     * @return
-     * @throws NoSuchAlgorithmException
-     * @throws InvalidKeySpecException
-     * @throws InvalidKeyException
-     * @throws SignatureException
      */
     public static String Sign(String privateKey, String data) throws NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException, SignatureException {
         Signature signer = Signature.getInstance("SHA256withECDSA");
@@ -40,15 +32,6 @@ public final class SpEccSignatureManager {
 
     /**
      * Verify signature
-     *
-     * @param publicKey
-     * @param data
-     * @param signature
-     * @return
-     * @throws NoSuchAlgorithmException
-     * @throws InvalidKeySpecException
-     * @throws InvalidKeyException
-     * @throws SignatureException
      */
     public static boolean Verify(String publicKey, String data, String signature) throws NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException, SignatureException {
         Signature signer = Signature.getInstance("SHA256withECDSA");
@@ -59,11 +42,6 @@ public final class SpEccSignatureManager {
 
     /**
      * Read EC public key
-     *
-     * @param pemPublicKey
-     * @return
-     * @throws NoSuchAlgorithmException
-     * @throws InvalidKeySpecException
      */
     private static ECPublicKey ReadPublicKey(String pemPublicKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
         String base64 = pemPublicKey.replace(PUBLIC_KEY_FOOTER, "")
@@ -76,11 +54,6 @@ public final class SpEccSignatureManager {
 
     /**
      * Read ecc private key from
-     *
-     * @param pemPrivateKey
-     * @return
-     * @throws NoSuchAlgorithmException
-     * @throws InvalidKeySpecException
      */
     private static ECPrivateKey ReadPrivateKey(String pemPrivateKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
         String base64 = pemPrivateKey.replace(EC_PRIVATE_KEY_HEADER, "")

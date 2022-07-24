@@ -4,23 +4,23 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.spare.sdk.utils.helpers.models.SpModel;
 
 @JsonPropertyOrder(alphabetic = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public final class SpUserAccount extends SpModel {
+public final class SpUserAccount extends SpAccount {
 
-    @JsonProperty("id")
-    public String Id;
+    @JsonProperty("customerReferenceId")
+    private String customerReferenceId;
 
-    @JsonProperty("identifier")
-    public String Identifier;
+    @JsonProperty("customerPaymentLink")
+    private String customerPaymentLink;
 
-    @JsonProperty("name")
-    public String Name;
+    public String getCustomerReferenceId() {
+        return customerReferenceId;
+    }
 
-    @JsonProperty("picture")
-    public String Picture;
-
+    public String getCustomerPaymentLink() {
+        return customerPaymentLink;
+    }
 }

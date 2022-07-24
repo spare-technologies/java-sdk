@@ -19,9 +19,6 @@ public final class SpCrypto {
 
     /**
      * Generate key ecc prime256v1 key pair
-     * @return
-     * @throws NoSuchAlgorithmException
-     * @throws InvalidAlgorithmParameterException
      */
     public static SpEcKeyPair GenerateKeyPair() throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
         KeyPairGenerator gen = KeyPairGenerator.getInstance("EC");
@@ -35,9 +32,6 @@ public final class SpCrypto {
 
     /**
      * Format key
-     * @param content
-     * @param isPrivate
-     * @return
      */
     private static String FormatKey(byte[] content, boolean isPrivate) {
         StringBuilder pem = new StringBuilder();

@@ -12,8 +12,16 @@ import com.spare.sdk.utils.helpers.models.SpModel;
 public final class SpPaymentUserAccount extends SpModel {
 
     @JsonProperty("account")
-    public SpUserAccount Account;
+    private SpUserAccount account;
 
     @JsonProperty("bankAccount")
-    public SpUserPaymentBankAccount BankAccount;
+    private SpUserPaymentBankAccount bankAccount;
+
+    public SpUserAccount getAccount() {
+        return account;
+    }
+
+    public SpUserPaymentBankAccount getBankAccount() {
+        return bankAccount;
+    }
 }

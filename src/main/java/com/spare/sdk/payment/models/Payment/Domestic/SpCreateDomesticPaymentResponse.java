@@ -11,8 +11,24 @@ import com.spare.sdk.utils.helpers.models.SpModel;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class SpCreateDomesticPaymentResponse extends SpModel {
     @JsonProperty("payment")
-    public SpDomesticPaymentResponse Payment;
+    private SpDomesticPaymentResponse payment;
 
     @JsonProperty("signature")
-    public String Signature;
+    private String signature;
+
+    public SpDomesticPaymentResponse getPayment() {
+        return payment;
+    }
+
+    public void setPayment(SpDomesticPaymentResponse payment) {
+        this.payment = payment;
+    }
+
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
+    }
 }

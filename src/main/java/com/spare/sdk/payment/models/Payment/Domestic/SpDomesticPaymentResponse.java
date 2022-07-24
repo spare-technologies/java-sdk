@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.spare.sdk.payment.Enum.SpPaymentSource;
+import com.spare.sdk.payment.models.Payment.Account.SpPaymentIssuer;
 import com.spare.sdk.payment.models.Payment.Account.SpPaymentUserAccount;
-import com.spare.sdk.payment.models.Payment.Account.SpUserAccount;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonPropertyOrder(alphabetic = true)
@@ -13,27 +13,90 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class SpDomesticPaymentResponse extends SpDomesticPayment {
     @JsonProperty("id")
-    public String Id;
+    private String id;
 
     @JsonProperty("reference")
-    public String reference;
+    private String reference;
 
     @JsonProperty("currency")
-    public String Currency;
+    private String currency;
 
     @JsonProperty("issuer")
-    public SpUserAccount Issuer;
+    private SpPaymentIssuer issuer;
 
     @JsonProperty("issuedFrom")
-    public SpPaymentSource IssuedFrom;
+    private SpPaymentSource issuedFrom;
 
     @JsonProperty("debtor")
-    public SpPaymentUserAccount Debtor;
+    private SpPaymentUserAccount debtor;
 
     @JsonProperty("link")
-    public String Link;
+    private String link;
 
     @JsonProperty("createdAt")
-    public String CreatedAt;
+    private String createdAt;
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getReference() {
+        return reference;
+    }
+
+    public void setReference(String reference) {
+        this.reference = reference;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public SpPaymentIssuer getIssuer() {
+        return issuer;
+    }
+
+    public void setIssuer(SpPaymentIssuer issuer) {
+        this.issuer = issuer;
+    }
+
+    public SpPaymentSource getIssuedFrom() {
+        return issuedFrom;
+    }
+
+    public void setIssuedFrom(SpPaymentSource issuedFrom) {
+        this.issuedFrom = issuedFrom;
+    }
+
+    public SpPaymentUserAccount getDebtor() {
+        return debtor;
+    }
+
+    public void setDebtor(SpPaymentUserAccount debtor) {
+        this.debtor = debtor;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
 }

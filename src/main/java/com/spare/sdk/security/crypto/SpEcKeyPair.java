@@ -4,16 +4,32 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public final class SpEcKeyPair {
 
-    public SpEcKeyPair(String privateKey, String publicKey) {
-        this.PrivateKey = privateKey;
-        this.PublicKey = publicKey;
-    }
+    @JsonProperty("publicKey")
+    public String publicKey;
+
+    @JsonProperty("privateKey")
+    public String privateKey;
 
     public SpEcKeyPair() {}
 
-    @JsonProperty("publicKey")
-    public String PublicKey;
+    public SpEcKeyPair(String privateKey, String publicKey) {
+        this.privateKey = privateKey;
+        this.publicKey = publicKey;
+    }
 
-    @JsonProperty("privateKey")
-    public String PrivateKey;
+    public String getPublicKey() {
+        return publicKey;
+    }
+
+    public void setPublicKey(String publicKey) {
+        this.publicKey = publicKey;
+    }
+
+    public String getPrivateKey() {
+        return privateKey;
+    }
+
+    public void setPrivateKey(String privateKey) {
+        this.privateKey = privateKey;
+    }
 }

@@ -9,31 +9,39 @@ import static org.assertj.core.api.Assertions.fail;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class SerialisationTest {
 
+    /**
+     * Null
+     */
     @Test
     @Order(1)
     void Should_Not_Contain_Null() {
         try {
             SpDomesticPayment payment = new SpDomesticPayment();
-            payment.Amount = null;
-            payment.Description = "testing null value";
+            payment.setAmount(null);
+            payment.setDescription("testing null value");
             String result = payment.toJsonString();
             System.out.println(result);
-            assertThat(result).doesNotContain("amount");
+            assertThat(result).doesNotContain("amount")
+                    .as("Serialized json should not contain null values");
         } catch (Exception e) {
             fail(e.getMessage());
         }
     }
 
+    /**
+     * Amount patten validation
+     */
     @Test
     @Order(2)
     void Should_Validate_Amount_Pattern() {
         try {
             SpDomesticPayment payment = new SpDomesticPayment();
-            payment.Amount = 229920.5040001000;
-            payment.Description = "testing decimal to string";
+            payment.setAmount(229920.5040001000);
+            payment.setDescription("testing decimal to string");
             String result = payment.toJsonString();
             System.out.println(result);
-            assertThat(result).matches(Pattern.compile("(?s).*\"(amount)\":\"((\\\\\"|[^\"])*)\".*$"));
+            assertThat(result).matches(Pattern.compile("(?s).*\"(amount)\":\"((\\\\\"|[^\"])*)\".*$"))
+                    .as("Serialized json should comply with the pattern");
         } catch (Exception e) {
             fail(e.getMessage());
         }

@@ -10,11 +10,17 @@ import com.spare.sdk.utils.helpers.models.SpModel;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class SpUserPaymentBankAccount extends SpModel {
-
     @JsonProperty("scheme")
-    public String Scheme;
+    private String scheme;
 
     @JsonProperty("identification")
-    public String Identification;
+    private String identification;
 
+    public String getScheme() {
+        return scheme;
+    }
+
+    public String getIdentification() {
+        return identification;
+    }
 }

@@ -12,11 +12,35 @@ import com.spare.sdk.utils.helpers.models.SpModel;
 public final class SpareSdkResponse<T, TV> extends SpModel {
 
     @JsonProperty("error")
-    public String Error;
+    private String error;
 
     @JsonProperty("data")
-    public T Data;
+    private T data;
 
     @JsonProperty("meta")
-    public TV Meta;
+    private TV meta;
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
+    }
+
+    public TV getMeta() {
+        return meta;
+    }
+
+    public void setMeta(TV meta) {
+        this.meta = meta;
+    }
 }

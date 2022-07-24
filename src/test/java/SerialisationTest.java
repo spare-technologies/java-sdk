@@ -7,20 +7,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SerialisationTest {
+class SerialisationTest {
 
     /**
      * Null
      */
     @Test
     @Order(1)
-    void Should_Not_Contain_Null() {
+    void should_not_contain_null() {
         try {
             SpDomesticPayment payment = new SpDomesticPayment();
             payment.setAmount(null);
             payment.setDescription("testing null value");
             String result = payment.toJsonString();
-            System.out.println(result);
             assertThat(result).doesNotContain("amount")
                     .as("Serialized json should not contain null values");
         } catch (Exception e) {
@@ -33,13 +32,12 @@ public class SerialisationTest {
      */
     @Test
     @Order(2)
-    void Should_Validate_Amount_Pattern() {
+    void should_validate_amount_pattern() {
         try {
             SpDomesticPayment payment = new SpDomesticPayment();
             payment.setAmount(229920.5040001000);
             payment.setDescription("testing decimal to string");
             String result = payment.toJsonString();
-            System.out.println(result);
             assertThat(result).matches(Pattern.compile("(?s).*\"(amount)\":\"((\\\\\"|[^\"])*)\".*$"))
                     .as("Serialized json should comply with the pattern");
         } catch (Exception e) {

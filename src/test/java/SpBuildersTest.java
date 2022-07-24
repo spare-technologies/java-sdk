@@ -3,15 +3,16 @@ import com.spare.sdk.payment.models.payment.domestic.SpDomesticPaymentRequest;
 import com.spare.sdk.payment.models.payment.domestic.SpPaymentDebtorInformation;
 import com.spare.sdk.payment.models.builder.SpDomesticPaymentRequestBuilder;
 import org.junit.jupiter.api.Test;
+
 import static org.assertj.core.api.Assertions.*;
 
-public class SpBuildersTest {
+class SpBuildersTest {
 
     /**
      * Domestic payment request builder test
      */
     @Test
-    public void Should_build_domestic_payment_request() {
+    void should_build_domestic_payment_request() {
         SpDomesticPaymentRequestBuilder builder = new SpDomesticPaymentRequestBuilder();
 
         Faker faker = Faker.instance();

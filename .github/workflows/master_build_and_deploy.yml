@@ -40,4 +40,4 @@ jobs:
 
       - name: Deploy
         run: |
-          mvn clean deploy -P release
+          mvn -DskipTests=true clean deploy -P release

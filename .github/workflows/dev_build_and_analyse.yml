@@ -47,9 +47,9 @@ jobs:
           MAVEN_SETTINGS: ${{ secrets.MAVEN_SETTINGS }}
         run: |
           echo $GPG_KEY | base64 -d > private.gpg
-          echo -n $GPG_PASS_PHRASE | gpg2 --import --batch private.gpg
+          echo -n $GPG_PASS_PHRASE | gpg2 --import --batch private.gpg &>/dev/null
           echo $GPG_TRUST | base64 -d > trust.gpg
-          gpg2 --import-ownertrust trust.gpg
+          gpg2 --import-ownertrust trust.gpg  &>/dev/null
           [ -d "$HOME/.m2" ] || mkdir $HOME/.m2
           echo $MAVEN_SETTINGS | base64 -d > $HOME/.m2/settings.xml
 
@@ -69,8 +69,8 @@ jobs:
           cp -r target/surefire-reports/ testOutput
           cp -r target/jacoco-report/ testOutput
           cp src/test/java/test_check.sh testOutput/surefire-reports/
-          cd testOutput/surefire-reports && chmod 755 test_check.sh && bash test_check.sh
-          zip -r testOutput.zip testOutput &>/dev/null
+          cd testOutput/surefire-reports/ && chmod 755 test_check.sh && bash test_check.sh
+          cd cd../.. && zip -r testOutput.zip testOutput &>/dev/null
 
       - name: Save test outputs
         uses: actions/upload-artifact@v2

@@ -51,5 +51,3 @@ for TEST_REPORT in *.xml; do
         exit 1
     fi
 done
-
-exit 0

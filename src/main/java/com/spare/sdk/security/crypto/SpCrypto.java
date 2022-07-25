@@ -40,7 +40,7 @@ public final class SpCrypto {
         StringBuilder pem = new StringBuilder();
         BaseEncoding encoder = BaseEncoding.base64();
         if (isPrivate) {
-            pem.append(String.format("%s\n", EC_PRIVATE_KEY_HEADER));
+            pem.append(String.format("%s%n", EC_PRIVATE_KEY_HEADER));
             pem.append(
                     encoder.withSeparator("\n", 64)
                             .encode(content)
@@ -48,7 +48,7 @@ public final class SpCrypto {
             pem.append("\n");
             pem.append(EC_PRIVATE_KEY_FOOTER);
         } else {
-            pem.append(String.format("%s\n", PUBLIC_KEY_HEADER));
+            pem.append(String.format("%s%n", PUBLIC_KEY_HEADER));
             pem.append(
                     encoder.withSeparator("\n", 64)
                             .encode(content)

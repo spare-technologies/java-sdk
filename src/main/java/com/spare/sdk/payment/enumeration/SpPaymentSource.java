@@ -1,4 +1,4 @@
-package com.spare.sdk.payment.Enum;
+package com.spare.sdk.payment.enumeration;
 
 public enum SpPaymentSource {
     MOBILE("MOBILE", 0),
@@ -8,7 +8,7 @@ public enum SpPaymentSource {
     private String name;
     private int value;
 
-    private SpPaymentSource(String name, int value){
+    SpPaymentSource(String name, int value){
         this.name = name;
         this.value = value;
     }

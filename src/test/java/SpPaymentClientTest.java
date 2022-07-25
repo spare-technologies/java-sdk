@@ -1,6 +1,6 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
-import com.spare.sdk.payment.Enum.SpPaymentSource;
+import com.spare.sdk.payment.enumeration.SpPaymentSource;
 import com.spare.sdk.payment.client.ISpPaymentClient;
 import com.spare.sdk.payment.client.SpPaymentClient;
 import com.spare.sdk.payment.client.SpPaymentClientOptions;
@@ -275,7 +275,7 @@ class SpPaymentClientTest {
      */
     @Test
     @Order(4)
-    void Should_List_Payment() {
+    void should_list_payment() {
         try {
             Faker faker = Faker.instance();
 
@@ -310,10 +310,53 @@ class SpPaymentClientTest {
     }
 
     /**
-     * Missing payment request signature test
+     * List domestic payments with auto pagination test
      */
     @Test
     @Order(5)
+    void should_set_pagination_and_list_payment() {
+        try {
+            Faker faker = Faker.instance();
+
+            SpareSdkResponse<ArrayList<SpDomesticPaymentResponse>, Object> listDomesticPayments = this.paymentClient.listDomesticPayments(0, 0);
+
+            assertThat(listDomesticPayments).isNotNull().as("Domestic payments list response should not be null");
+
+            assertThat(listDomesticPayments.getError()).isNull();
+
+            assertThat(listDomesticPayments.getData()).isNotNull()
+                    .as("Domestic payments list response data should not be null");
+
+            if (!listDomesticPayments.getData().isEmpty()) {
+
+                assertThat(listDomesticPayments.getData().size() <= 100)
+                        .as("Should not load more than 100 payment")
+                        .isTrue();
+
+                listDomesticPayments.getData().forEach(spDomesticPaymentResponse -> {
+                    assertThat(spDomesticPaymentResponse).isNotNull()
+                            .as("Payment should not be null");
+
+                    assertThat(spDomesticPaymentResponse.getReference())
+                            .isNotNull()
+                            .as("Payment should have a reference");
+                });
+            }
+
+            if (testEnvironment.getDebugMode()) {
+                System.out.println(listDomesticPayments.toJsonString());
+            }
+
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }
+
+    /**
+     * Missing payment request signature test
+     */
+    @Test
+    @Order(6)
     void should_through_exception_on_missing_signature() {
         Faker faker = Faker.instance();
 
@@ -332,7 +375,7 @@ class SpPaymentClientTest {
      * Wrong sdk configuration test
      */
     @Test
-    @Order(6)
+    @Order(7)
     void should_validate_client_configuration() {
         assertThrows(Exception.class, () -> paymentClient = new SpPaymentClient(null));
     }
@@ -341,7 +384,7 @@ class SpPaymentClientTest {
      * Missing api key test
      */
     @Test
-    @Order(7)
+    @Order(8)
     void should_check_missing_api_key() {
         assertThrows(Exception.class, () -> {
             SpPaymentClientOptions spPaymentClientOptions = new SpPaymentClientOptions();
@@ -357,7 +400,7 @@ class SpPaymentClientTest {
      * Missing app id test
      */
     @Test
-    @Order(8)
+    @Order(9)
     void should_check_missing_app_id() {
         assertThrows(Exception.class, () -> {
             SpPaymentClientOptions spPaymentClientOptions = new SpPaymentClientOptions();
@@ -366,6 +409,17 @@ class SpPaymentClientTest {
             spPaymentClientOptions.setBaseUrl(new URI(testEnvironment.getBaseUrl()));
 
             paymentClient = new SpPaymentClient(spPaymentClientOptions);
+        });
+    }
+
+    /**
+     * Missing payment id test
+     */
+    @Test
+    @Order(10)
+    void should_throw_exception_on_missing_payment_id() {
+        assertThrows(Exception.class, () -> {
+            this.paymentClient.getDomesticPayment(null);
         });
     }
 

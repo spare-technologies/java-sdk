@@ -47,9 +47,9 @@ jobs:
           MAVEN_SETTINGS: ${{ secrets.MAVEN_SETTINGS }}
         run: |
           echo $GPG_KEY | base64 -d > private.gpg
-          echo -n $GPG_PASS_PHRASE | sudo gpg2 --import --batch private.gpg
+          echo -n $GPG_PASS_PHRASE | gpg2 --import --batch private.gpg
           echo $GPG_TRUST | base64 -d > trust.gpg
-          sudo gpg2 --import-ownertrust trust.gpg
+          gpg2 --import-ownertrust trust.gpg
           [ -d "$HOME/.m2" ] || mkdir $HOME/.m2
           echo $MAVEN_SETTINGS | base64 -d > $HOME/.m2/settings.xml
 

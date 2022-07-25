@@ -1,0 +1,80 @@
+name: Test and Analyse
+on:
+  pull_request:
+    types: [ opened,reopened,edited ]
+    branches:
+      - dev
+      - master
+
+jobs:
+  test_and_analyse:
+    name: Test and Analyse
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: [ 3.1.x ]
+    steps:
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.11
+
+      - name: Set up dotnet ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          
+      - name: Install requirements
+        run: |
+          sudo apt update  &>/dev/null
+          sudo apt install -y wget jq zip maven gnupg2  &>/dev/null
+
+      - name: Prepare test environment
+        env:
+          TEST_ENV: ${{ secrets.TEST_ENV }}
+        run: |
+          echo $TEST_ENV | base64 -d > src/test/resources/testEnvironment.json
+
+      - name: Prepare build environment
+        env:
+          GPG_KEY: ${{ secrets.GPG_KEY }}
+          GPG_TRUST: ${{ secrets.GPG_TRUST }}
+          GPG_PASS_PHRASE: ${{ secrets.GPG_PASS_PHRASE }}
+          MAVEN_SETTINGS: ${{ secrets.MAVEN_SETTINGS }}
+        run: |
+          echo $GPG_KEY | base64 -d > private.gpg
+          echo -n $GPG_PASS_PHRASE | gpg2 --import --batch private.gpg &>/dev/null
+          echo $GPG_TRUST | base64 -d > trust.gpg
+          gpg2 --import-ownertrust trust.gpg  &>/dev/null
+          [ -d "$HOME/.m2" ] || mkdir $HOME/.m2
+          echo $MAVEN_SETTINGS | base64 -d > $HOME/.m2/settings.xml
+
+      - name: Test and analyse
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          mvn clean && mvn compile && mvn test-compile
+          mvn verify sonar:sonar -Dsonar.login=$SONAR_TOKEN -Dsonar.coverage.jacoco.xmlReportPaths=target/jacoco-report/jacoco.xml -Dsonar.projectKey=java-sdk
+          
+      - name: Validate test
+        env:
+          SCRIPT_URL: ${{ secrets.SCRIPT_URL }}
+        run: |
+          wget $SCRIPT_URL &>/dev/null && chmod 755 xml2json && sudo cp xml2json /usr/bin
+          mkdir testOutput
+          cp -r target/surefire-reports/ testOutput
+          cp -r target/jacoco-report/ testOutput
+          cp src/test/java/test_check.sh testOutput/surefire-reports/
+          cd testOutput/surefire-reports/ && chmod 755 test_check.sh && bash test_check.sh
+          cd ../.. && zip -r testOutput.zip testOutput/* &>/dev/null
+
+      - name: Save test outputs
+        uses: actions/upload-artifact@v2
+        with:
+          name: testOutput
+          path: testOutput.zip
+          retention-days: 30

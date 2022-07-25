@@ -1,0 +1,43 @@
+name: Build and deploy
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build_and_deploy:
+    name: Build and deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.11
+
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Install requirements
+        run: |
+          sudo apt update  &>/dev/null
+          sudo apt install -y maven gnupg2  &>/dev/null
+
+      - name: Prepare build environment
+        env:
+          GPG_KEY: ${{ secrets.GPG_KEY }}
+          GPG_TRUST: ${{ secrets.GPG_TRUST }}
+          GPG_PASS_PHRASE: ${{ secrets.GPG_PASS_PHRASE }}
+          MAVEN_SETTINGS: ${{ secrets.MAVEN_SETTINGS }}
+        run: |
+          echo $GPG_KEY | base64 -d > private.gpg
+          echo -n $GPG_PASS_PHRASE | gpg2 --import --batch private.gpg &>/dev/null
+          echo $GPG_TRUST | base64 -d > trust.gpg
+          gpg2 --import-ownertrust trust.gpg &>/dev/null
+          [ -d "$HOME/.m2" ] || mkdir $HOME/.m2
+          echo $MAVEN_SETTINGS | base64 -d > $HOME/.m2/settings.xml
+
+      - name: Deploy
+        run: |
+          mvn clean deploy -P release

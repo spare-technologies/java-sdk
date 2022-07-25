@@ -70,7 +70,7 @@ jobs:
           cp -r target/jacoco-report/ testOutput
           cp src/test/java/test_check.sh testOutput/surefire-reports/
           cd testOutput/surefire-reports/ && chmod 755 test_check.sh && bash test_check.sh
-          cd../.. && zip -r testOutput.zip testOutput &>/dev/null
+          cd ../.. && zip -r testOutput.zip testOutput &>/dev/null
 
       - name: Save test outputs
         uses: actions/upload-artifact@v2

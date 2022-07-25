@@ -1,6 +1,7 @@
 package com.spare.sdk.payment.client;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.spare.sdk.payment.SpClientSdkException;
 import com.spare.sdk.payment.models.payment.domestic.SpCreateDomesticPaymentResponse;
 import com.spare.sdk.payment.models.payment.domestic.SpDomesticPaymentRequest;
 import com.spare.sdk.payment.models.payment.domestic.SpDomesticPaymentResponse;
@@ -22,6 +23,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,7 +46,7 @@ public final class SpPaymentClient implements ISpPaymentClient {
      * Create domestic payment
      */
     @Override
-    public SpCreateDomesticPaymentResponse createDomesticPayment(SpDomesticPaymentRequest paymentRequest, String signature) throws Exception {
+    public SpCreateDomesticPaymentResponse createDomesticPayment(SpDomesticPaymentRequest paymentRequest, String signature) throws IOException, SpClientSdkException {
 
         HttpClient client = getClient();
 
@@ -58,7 +60,7 @@ public final class SpPaymentClient implements ISpPaymentClient {
         HttpResponse response = client.execute(request);
 
         if (response.getStatusLine().getStatusCode() != 200) {
-            throw new Exception(EntityUtils.toString(response.getEntity()));
+            throw new SpClientSdkException(EntityUtils.toString(response.getEntity()));
         }
 
         SpareSdkResponse<SpDomesticPaymentResponse, Object> responseModel = ObjectSerializer.toObject(EntityUtils.toString(response.getEntity()), new TypeReference<SpareSdkResponse<SpDomesticPaymentResponse, Object>>() {
@@ -77,7 +79,7 @@ public final class SpPaymentClient implements ISpPaymentClient {
      * Get domestic payment
      */
     @Override
-    public SpareSdkResponse<SpDomesticPaymentResponse, Object> getDomesticPayment(String id) throws Exception {
+    public SpareSdkResponse<SpDomesticPaymentResponse, Object> getDomesticPayment(String id) throws IOException, SpClientSdkException {
         HttpClient client = getClient();
 
         HttpUriRequest request = RequestBuilder.create("GET")
@@ -88,11 +90,12 @@ public final class SpPaymentClient implements ISpPaymentClient {
         HttpResponse response = client.execute(request);
 
         if (response.getStatusLine().getStatusCode() != 200) {
-            throw new Exception(EntityUtils.toString(response.getEntity()));
+            throw new SpClientSdkException(EntityUtils.toString(response.getEntity()));
         }
 
 
-        return ObjectSerializer.toObject(EntityUtils.toString(response.getEntity()), new TypeReference<SpareSdkResponse<SpDomesticPaymentResponse, Object>>() {});
+        return ObjectSerializer.toObject(EntityUtils.toString(response.getEntity()), new TypeReference<SpareSdkResponse<SpDomesticPaymentResponse, Object>>() {
+        });
 
     }
 
@@ -100,7 +103,7 @@ public final class SpPaymentClient implements ISpPaymentClient {
      * List domestic payments
      */
     @Override
-    public SpareSdkResponse<ArrayList<SpDomesticPaymentResponse>, Object> listDomesticPayments(int start, int perPage) throws Exception {
+    public SpareSdkResponse<ArrayList<SpDomesticPaymentResponse>, Object> listDomesticPayments(int start, int perPage)  throws IOException, SpClientSdkException {
         if (perPage == 0) {
             perPage = 100;
         }
@@ -114,7 +117,7 @@ public final class SpPaymentClient implements ISpPaymentClient {
         HttpResponse response = client.execute(request);
 
         if (response.getStatusLine().getStatusCode() != 200) {
-            throw new Exception(EntityUtils.toString(response.getEntity()));
+            throw new SpClientSdkException(EntityUtils.toString(response.getEntity()));
         }
 
         return ObjectSerializer.toObject(EntityUtils.toString(response.getEntity()), new TypeReference<SpareSdkResponse<ArrayList<SpDomesticPaymentResponse>, Object>>() {

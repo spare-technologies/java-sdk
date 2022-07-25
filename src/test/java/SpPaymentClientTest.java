@@ -1,6 +1,6 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
-import com.spare.sdk.payment.Enum.SpPaymentSource;
+import com.spare.sdk.payment.enumeration.SpPaymentSource;
 import com.spare.sdk.payment.client.ISpPaymentClient;
 import com.spare.sdk.payment.client.SpPaymentClient;
 import com.spare.sdk.payment.client.SpPaymentClientOptions;

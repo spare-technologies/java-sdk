@@ -2,7 +2,7 @@ package com.spare.sdk.payment.client;
 
 public final class SpEndpoints {
 
-    private String value;
+    private final String value;
 
     public String getValue() {
         return value;

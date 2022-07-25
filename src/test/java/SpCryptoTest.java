@@ -8,14 +8,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SpCryptoTest {
+class SpCryptoTest {
 
     /**
      * Generate EC key pair test
      */
     @Test
     @Order(1)
-    public void Should_generate_key_pair() {
+    void should_generate_key_pair() {
         try {
             SpEcKeyPair keys = SpCrypto.generateKeyPair();
 
@@ -23,7 +23,7 @@ public class SpCryptoTest {
 
             assertThat(keys.getPrivateKey()).isNotBlank().as("Keypair should have private key");
 
-            assertThat(keys.getPublicKey()).isNotBlank().as("Keypair should have public key");
+            assertThat(keys.getPublicKey()).isNotBlank().as("Keypair should have key");
 
         } catch (Exception e) {
             fail(e.getMessage());
@@ -35,7 +35,7 @@ public class SpCryptoTest {
      */
     @Test
     @Order(2)
-    public void Should_Sign_And_Verify() throws Exception {
+    void should_Sign_And_Verify() throws Exception {
         Faker faker = Faker.instance();
         String data = faker.lorem().characters();
 

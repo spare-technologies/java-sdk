@@ -30,7 +30,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.fail;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SpPaymentClientTest {
+class SpPaymentClientTest {
 
     private ISpPaymentClient paymentClient;
 
@@ -314,7 +314,7 @@ public class SpPaymentClientTest {
      */
     @Test
     @Order(5)
-    public void should_through_exception_on_missing_signature() {
+    void should_through_exception_on_missing_signature() {
         Faker faker = Faker.instance();
 
         SpDomesticPaymentRequestBuilder paymentRequestBuilder = new SpDomesticPaymentRequestBuilder();
@@ -333,7 +333,7 @@ public class SpPaymentClientTest {
      */
     @Test
     @Order(6)
-    public void should_validate_client_configuration() {
+    void should_validate_client_configuration() {
         assertThrows(Exception.class, () -> paymentClient = new SpPaymentClient(null));
     }
 
@@ -342,7 +342,7 @@ public class SpPaymentClientTest {
      */
     @Test
     @Order(7)
-    public void should_check_missing_api_key() {
+    void should_check_missing_api_key() {
         assertThrows(Exception.class, () -> {
             SpPaymentClientOptions spPaymentClientOptions = new SpPaymentClientOptions();
             spPaymentClientOptions.setApiKey(null);
@@ -358,7 +358,7 @@ public class SpPaymentClientTest {
      */
     @Test
     @Order(8)
-    public void should_check_missing_app_id() {
+    void should_check_missing_app_id() {
         assertThrows(Exception.class, () -> {
             SpPaymentClientOptions spPaymentClientOptions = new SpPaymentClientOptions();
             spPaymentClientOptions.setApiKey(testEnvironment.getApiKey());

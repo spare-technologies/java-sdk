@@ -4,6 +4,7 @@ on:
     types: [ opened,reopened,edited ]
     branches:
       - dev
+      - master
 
 jobs:
   test_and_analyse:
@@ -37,7 +38,6 @@ jobs:
           TEST_ENV: ${{ secrets.TEST_ENV }}
         run: |
           echo $TEST_ENV | base64 -d > src/test/resources/testEnvironment.json
-          ls src/test/resources/
 
       - name: Prepare build environment
         env:

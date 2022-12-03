@@ -233,6 +233,10 @@ class SpPaymentClientTest {
                     .isNotEmpty()
                     .as("Payment response debtor customer reference should not be null");
 
+            assertThat(paymentResponse.getPayment().getStatus())
+                    .isNotNull()
+                    .as("Payment status should not be null");
+
         } catch (Exception e) {
             fail(e.getMessage());
         }

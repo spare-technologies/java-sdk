@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.spare.sdk.payment.enumeration.SpPaymentSource;
+import com.spare.sdk.payment.enumeration.SpPaymentStatus;
 import com.spare.sdk.payment.models.payment.account.SpPaymentIssuer;
 import com.spare.sdk.payment.models.payment.account.SpPaymentUserAccount;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -35,6 +36,9 @@ public final class SpDomesticPaymentResponse extends SpDomesticPayment {
 
     @JsonProperty("createdAt")
     private String createdAt;
+
+    @JsonProperty("status")
+    private SpPaymentStatus status;
 
     public String getId() {
         return id;
@@ -98,5 +102,13 @@ public final class SpDomesticPaymentResponse extends SpDomesticPayment {
 
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public SpPaymentStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(SpPaymentStatus status) {
+        this.status = status;
     }
 }
